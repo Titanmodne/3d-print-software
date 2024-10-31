@@ -7,7 +7,7 @@ def convert_gcode_format(input_file_path, output_file_path):
         with open(input_file_path, 'r') as infile, open(output_file_path, 'w') as outfile:
             for line in infile:
                 # 匹配并解析原始格式中的数据
-                match = re.search(r'G1 - X: ([\d\.-]+), Y: ([\d\.-]+), Z: ([\d\.-]+) J: ([\d\.-]+) F: (\d+\.?\d*)', line)
+                match = re.search(r'G1 X: ([\d\.-]+), Y: ([\d\.-]+), Z: ([\d\.-]+) J: ([\d\.-]+) F: (\d+\.?\d*)', line)
                 if match:
                     x, y, z, j, f = match.groups()
                     # 转换为新的格式并写入文件
