@@ -1,0 +1,58 @@
+{
+    "layer_thickness": "0.2",
+    "bottom_layers": 2,
+    "top_layers": 2,
+    "wall_loops": 2,
+    "enable_support": false,
+    "support_type": "grid",
+    "support_material": "PLA",
+    "line_width": "0.4",
+    "print_spacing": "1.0",
+    "infill_pattern": "lines",
+    "infill_extruder": "T0",
+    "inner_wall_extruder": "T0",
+    "outer_wall_extruder": "T0",
+    "support_extruder": "T0",
+    "surface_support_extruder": "T0",
+    "skin_extruder": "T0",
+    "skirt_extruder": "T0",
+    "material_settings": {
+        "continuous_material": "1KCCFPA",
+        "extrusion_rate": 0.998,
+        "normal_speed": 500,
+        "initial_speed": 300,
+        "lift_speed": 800,
+        "auxiliary_material": "PLA",
+        "print_speed": 500
+    },
+    "device_settings": {
+        "three_start_point": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "three_t0_to_t1": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "three_cut_length": 0.0,
+        "three_pre_feed_length": 0.0,
+        "three_short_distance": 0.0,
+        "multi_start_point": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "multi_t0_to_t1": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "multi_cut_length": 0.0,
+        "multi_pre_feed_length": 0.0,
+        "multi_short_distance": 0.0,
+        "user_coordinate_value": 0,
+        "tool_coordinate_value": 0
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "": {
+        "layer_height": 0.25,
+        "layer_height_0": 0.25,
+        "line_width": 1.0,
+        "wall_line_width": 1.0,
+        "wall_line_width_0": 1.0,
+        "wall_line_width_x": 1.0,
+        "initial_layer_line_width_factor": 100.0,
+        "skin_line_width": 1.2,
+        "wall_thickness": 5.0,
+        "wall_line_count": 2,
+        "wall_ordering": "outside_in",
+        "top_bottom_thickness": 0.25,
+        "top_thickness": 0.25,
+        "top_layers": 2,
+        "bottom_thickness": 0.25,
+        "bottom_layers": 2,
+        "infill_sparse_density": 100.0,
+        "infill_line_distance": 1.0,
+        "infill_pattern": "lines",
+        "infill_sparse_thickness": 0.25
+    }
+}

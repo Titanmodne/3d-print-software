@@ -1,80 +1,51 @@
 import re
-import tkinter as tk
-from tkinter import filedialog, simpledialog
 import math
 
 def extract_coordinates(input_file):
     coordinates = []
     original_lines = []
-
     with open(input_file, 'r') as file:
         for line in file:
-            line = line.strip()
-            if line:
-                parts = re.findall(r'X: ([+-]?\d*\.?\d+), Y: ([+-]?\d*\.?\d+), Z: ([+-]?\d*\.?\d+)', line)
+            original_line = line.strip()
+            original_lines.append(original_line)  # 保留原始行
+            if original_line:
+                parts = re.findall(r'X: ([+-]?\d*\.?\d+), Y: ([+-]?\d*\.?\d+), Z: ([+-]?\d*\.?\d+)', original_line)
                 if parts:
                     x, y, z = map(float, parts[0])
                     coordinates.append((x, y, z))
-                    original_lines.append(line)
-
+                else:
+                    coordinates.append(None)  # 保存无坐标行为None
+            else:
+                coordinates.append(None)  # 保存空行为None
     return coordinates, original_lines
 
 def calculate_distances(coordinates, original_lines, c, f):
     output_lines = []
-    previous_z = None
     accumulated_j = 0  # 初始化累加的J值
-    line_count_after_empty = 0  # 记录每个空行后的行数
+    previous_coordinate = None
 
-    for i in range(len(coordinates)):
-        x, y, z = coordinates[i]
-        modified_line = original_lines[i].replace("G0", "G1")
+    for i, coordinate in enumerate(coordinates):
+        if coordinate is None:
+            output_lines.append("")  # 直接添加空行
+            accumulated_j = 0  # 检测到空行时重置J值
+            previous_coordinate = None  # 清除上一坐标
+            continue
 
-        # Calculate distance if not the first entry
-        if i > 0:
-            x1, y1, z1 = coordinates[i - 1]
+        x, y, z = coordinate
+        if previous_coordinate:
+            x1, y1, z1 = previous_coordinate
             j = math.sqrt((x - x1) ** 2 + (y - y1) ** 2)
-            j_c = j * c
-            if z != previous_z:  # Check for Z value changes
-                if line_count_after_empty < 4:
-                    # Remove the last few lines if line count after the last empty line is less than 4
-                    output_lines = output_lines[:-line_count_after_empty]
-                output_lines.append("")  # Add an empty line before the line with new Z
-                accumulated_j = 0  # Reset J value for the new Z
-                line_count_after_empty = 0  # Reset line count after empty line
-            accumulated_j += j_c  # Accumulate J value
-            modified_line = f"{modified_line} J: {accumulated_j:.2f} F: {f}"
+            accumulated_j += j * c
+            modified_line = f"{original_lines[i]} J: {accumulated_j:.2f} F: {f}"
         else:
-            modified_line = f"{modified_line} J: {accumulated_j:.2f} F: 100"
+            modified_line = f"{original_lines[i]} J: 0.00 F: {f}"  # 对第一条数据直接设置 J 值为 0
 
         output_lines.append(modified_line)
-        previous_z = z  # Update the previous Z value for the next iteration
-        line_count_after_empty += 1  # Increment line count after empty line
-
-    # Remove the last few lines if line count after the last empty line is less than 4
-    if line_count_after_empty < 4:
-        output_lines = output_lines[:-line_count_after_empty]
+        previous_coordinate = (x, y, z)
 
     return output_lines
 
-def main():
-    root = tk.Tk()
-    root.withdraw()
-
-    k = simpledialog.askfloat("Input Parameter K", "Please enter the multiplier K:", minvalue=0.0)
-    if k is None:
-        print("No K parameter entered.")
-        return
-
-    f = simpledialog.askfloat("Input Parameter F", "Please enter the value for F:", minvalue=0.0)
-    if f is None:
-        print("No F parameter entered.")
-        return
-
-    input_file_path = filedialog.askopenfilename(title='Select Input File', filetypes=[('Text Files', '*.txt')])
-    if not input_file_path:
-        print("No input file selected.")
-        return
-
+def process_jcount(input_file_path, output_file_path, k, f):
     coordinates, original_lines = extract_coordinates(input_file_path)
     if not coordinates:
         print("No coordinates extracted.")
@@ -82,18 +53,8 @@ def main():
 
     output_lines = calculate_distances(coordinates, original_lines, k, f)
 
-    output_file_path = filedialog.asksaveasfilename(defaultextension='.txt', title='Save Output File',
-                                                    filetypes=[('Text Files', '*.txt')])
-    if not output_file_path:
-        print("No output file selected.")
-        return
-
     with open(output_file_path, 'w') as file:
-        # Write the processed output lines
         for line in output_lines:
             file.write(line + "\n")
 
     print(f"Processed data saved to {output_file_path}")
-
-if __name__ == "__main__":
-    main()

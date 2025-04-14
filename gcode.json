@@ -1,0 +1,84 @@
+{
+    "json_config": {
+        "layer_thickness": "0.25",
+        "line_width": "1.2",
+        "bottom_layers": 2,
+        "top_layers": 2,
+        "wall_loops": 2,
+        "infill_pattern": "lines"
+    },
+    "gcode_processor": {
+        "layer_thickness": "0.25",
+        "line_width": "1.2",
+        "infill_extruder": "T0",
+        "inner_wall_extruder": "T1",
+        "outer_wall_extruder": "T0",
+        "support_extruder": "T0",
+        "surface_support_extruder": "T0",
+        "skin_extruder": "T0",
+        "skirt_extruder": "T0",
+        "extrusion_rate": 0.98,
+        "normal_speed": 500,
+        "initial_speed": 300,
+        "lift_speed": 800,
+        "print_speed": 500,
+        "multi_start_point": {
+            "x": "348.000",
+            "y": "94.000",
+            "z": "0.250"
+        },
+        "multi_t0_to_t1": {
+            "x": "3.040",
+            "y": "-56.471",
+            "z": "-3.110"
+        },
+        "multi_cut_length": "36.000",
+        "multi_pre_feed_length": "40.000",
+        "user_coordinate_value": 4,
+        "tool_coordinate_value": 11
+    },
+    "\u5f85\u5206\u7c7b": {
+        "enable_support": false,
+        "support_type": "grid",
+        "support_material": "PLA",
+        "material_settings": {
+            "continuous_material": "1KCCFPA",
+            "extrusion_rate": 0.998,
+            "normal_speed": 500,
+            "initial_speed": 300,
+            "lift_speed": 800,
+            "auxiliary_material": "PLA",
+            "print_speed": 500
+        },
+        "device_settings": {
+            "three_start_point": {
+                "x": "0.000",
+                "y": "0.000",
+                "z": "0.000"
+            },
+            "three_t0_to_t1": {
+                "x": "0.000",
+                "y": "0.000",
+                "z": "0.000"
+            },
+            "three_cut_length": "0.000",
+            "three_pre_feed_length": "0.000",
+            "three_short_distance": "0.000",
+            "multi_start_point": {
+                "x": "348.000",
+                "y": "94.000",
+                "z": "0.250"
+            },
+            "multi_t0_to_t1": {
+                "x": "3.040",
+                "y": "-56.471",
+                "z": "-3.110"
+            },
+            "multi_cut_length": "36.000",
+            "multi_pre_feed_length": "40.000",
+            "multi_short_distance": "0.000",
+            "user_coordinate_value": 4,
+            "tool_coordinate_value": 11
+        }
+    }
+}

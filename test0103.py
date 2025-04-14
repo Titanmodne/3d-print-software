@@ -13,10 +13,16 @@ def process_gcode(input_file, output_file):
     skip_next_lines = 0  # 用于跳过下一行数据
     prev_line = None  # 用于存储上一次的行
     prev_g0_line = None  # 用于存储上一次的G0行
+    first_g1_line = True  # 用于标记是否是第一条G1指令
+    skip_first_g1 = False  # 用于跳过第一条G1指令的标志
 
     with open(input_file, 'r') as infile:
         for line in infile:
             line = line.strip()
+
+            # 检查是否为G91指令，如果是，停止提取
+            if line.startswith("G91"):
+                break  # 退出循环，停止处理
 
             # 如果要跳过这一行，直接跳过
             if skip_next_lines > 0:
@@ -25,12 +31,9 @@ def process_gcode(input_file, output_file):
 
             # 保留所有含有;TYPE:或;LAYER:的行
             if ";TYPE:" in line or ";LAYER:" in line:
-                # 检测是否为 WALL-OUTER 类型
-                if ";TYPE:WALL-OUTER" in line and prev_g0_line:
-                    # 将 WALL-OUTER 行放前面，G0 行放后面
-                    result.append(line + "\n")  # 先添加 WALL-OUTER 行
-                    result.append(prev_g0_line)  # 后添加 G0 行
-                    prev_g0_line = None  # 重置上一个G0行
+                if skip_first_g1:  # 如果已经跳过第一条G1，则将下一条G1指令合并到;TYPE:后
+                    skip_first_g1 = False  # 重置标志
+                    result.append(line + "\n")  # 添加当前;TYPE:行
                     continue
                 else:
                     result.append(line + "\n")
@@ -64,10 +67,17 @@ def process_gcode(input_file, output_file):
                 if z_value:
                     last_z = round(float(z_value[1:]), 2)
 
-                # 将G0指令存储到 prev_g0_line 中，用于后续交换
+                # 如果是第一条G1指令，跳过它并标记需要合并第二条G1指令
+                if first_g1_line:
+                    first_g1_line = False
+                    skip_first_g1 = True
+                    continue
+
+                # 保留G0指令，并保留Z值
                 if g_code == "G0":
-                    prev_g0_line = f"{g_code} X{last_x} Y{last_y} Z{last_z}\n"
-                    continue  # 跳过G0行，等待后续交换
+                    output_line = f"{g_code} X{last_x} Y{last_y} Z{last_z}\n"
+                    result.append(output_line)
+                    continue  # 跳过当前G0行，直接进行下一次循环
 
                 # 处理G1指令，并保存到结果
                 if current_printhead == "T0" or current_printhead == "T1":
